@@ -1,0 +1,410 @@
+{
+  "name": "Curso N8N iniciantes 1.0",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "### gatilho manual:",
+        "height": 320,
+        "width": 170
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -40,
+        -180
+      ],
+      "typeVersion": 1,
+      "id": "81c822e3-66e9-439d-b8d7-1d5e579cf06c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -80
+      ],
+      "id": "6f5a05ff-5c1d-4994-9e7c-336da4bcbbc2",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "init",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        480
+      ],
+      "id": "2291013f-5983-4817-a9b5-2f3c9b6e1120",
+      "name": "Webhook",
+      "webhookId": "645fc826-1f80-47eb-ab44-4ccc9961c8fc"
+    },
+    {
+      "parameters": {
+        "content": "### gatilho webhook (eventos):\n- modo dev: executa a cada vez em que apertar em test workflow\n- modo prod: fica executando em background quando o workflow está ativo\n- a url muda para os 2 modos",
+        "height": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -60,
+        280
+      ],
+      "typeVersion": 1,
+      "id": "1e37d954-0c55-4418-b13e-037617705a79",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "### edit fields (set):\n- criar campo por campo\n- direto do json\n- criar campos e ir pegando direto do json body ou query params",
+        "height": 760
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        240,
+        280
+      ],
+      "typeVersion": 1,
+      "id": "4d6822f1-7304-48a7-b578-10bfc519d4d4",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1008c1b4-4f1c-4548-9b4f-97e207a5650c",
+              "name": "body",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        660
+      ],
+      "id": "708cf7df-053d-4dff-97c6-ca57e7e3add6",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "=\n {{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        860
+      ],
+      "id": "da51e4a8-3b43-4fba-9e44-79135f2a3f1f",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "url": "=https://viacep.com.br/ws/{{ $json.zipCode }}/json/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        460
+      ],
+      "id": "842bdf4a-f898-4597-b61d-8b1212d6599a",
+      "name": "Get Address"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4525a3a5-cace-4d0f-b9f3-554bf57e44c0",
+              "name": "uf",
+              "value": "={{ $json.uf }}",
+              "type": "string"
+            },
+            {
+              "id": "13d35bb8-a7dc-4fdc-85a8-3e8c2bb6ff5b",
+              "name": "city",
+              "value": "={{ $json.localidade }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        460
+      ],
+      "id": "89faf44e-5b8a-446e-a708-052533487032",
+      "name": "response address"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a01e554-1153-4cc1-ac1b-431cda1b2a27",
+              "name": "name",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "d2ae4aa2-203f-4058-8e95-d9a5e0d92805",
+              "name": "email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "d7349470-b4fb-4d88-ab17-25abbf24cb43",
+              "name": "age",
+              "value": "={{ $json.body.age }}",
+              "type": "number"
+            },
+            {
+              "id": "39c9b5a8-8984-40d3-9fc4-b983352a10fa",
+              "name": "zipCode",
+              "value": "={{ $json.body.zipCode.replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "e3fa63c6-d69c-4e98-a1fd-a65b48ec3366",
+              "name": "order",
+              "value": "={{ $json.body.orderService.title }}",
+              "type": "string"
+            },
+            {
+              "id": "9def66ef-7361-4aff-9cae-2d3db111e2ba",
+              "name": "value",
+              "value": "={{ $json.body.orderService.value }}",
+              "type": "number"
+            },
+            {
+              "id": "c41c0303-0958-41e4-9c02-0ae0b7287ba8",
+              "name": "date",
+              "value": "={{ $json.body.orderService.date }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        460
+      ],
+      "id": "22ad87c0-8916-458f-8008-1159f6b3dd5a",
+      "name": "User Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "53c84bbd-29c1-4e69-a9f9-4c18df85f828",
+              "leftValue": "={{ $json.uf }}",
+              "rightValue": "MA",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "043735ba-5321-423e-9d64-142e5bbcf400",
+              "leftValue": "={{ $('User Fields').last().json.age }}",
+              "rightValue": 17,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1020,
+        460
+      ],
+      "id": "020a604e-3de2-490f-a763-d3c6a3435da1",
+      "name": "If MA state and adult"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        560
+      ],
+      "id": "4a4d9347-0481-4e03-95cd-b3332486c532",
+      "name": "Do nothing"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        360
+      ],
+      "id": "a4fc2ab3-242d-4468-aa52-e610beff3df4",
+      "name": "Send message specific"
+    },
+    {
+      "parameters": {
+        "content": "iteração de cada item do loop, executando uma ação com o valor de cada item da lista",
+        "height": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        240,
+        -180
+      ],
+      "typeVersion": 1,
+      "id": "4b65790e-b3c2-4a95-9ee2-4c42a5b77396",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Test workflow’": [
+      {
+        "json": {
+          "list": [
+            {
+              "name": "João",
+              "phone": "123442343",
+              "zipCode": "27338510"
+            },
+            {
+              "name": "Pedro",
+              "phone": "123442343",
+              "zipCode": "65400000"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "User Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Address": {
+      "main": [
+        [
+          {
+            "node": "response address",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "response address": {
+      "main": [
+        [
+          {
+            "node": "If MA state and adult",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Fields": {
+      "main": [
+        [
+          {
+            "node": "Get Address",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If MA state and adult": {
+      "main": [
+        [
+          {
+            "node": "Send message specific",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "149d7779-55ba-4184-b502-c230b9c81646",
+  "meta": {
+    "instanceId": "1d53bf5c88003285be2be183da5a998ea5eac1f197a5c882acbde65f5535e061"
+  },
+  "id": "gsw5xbCNdPpBgJf5",
+  "tags": [
+    {
+      "createdAt": "2025-05-01T16:02:10.735Z",
+      "updatedAt": "2025-05-01T16:02:10.735Z",
+      "id": "bYumwkuro4UiX77P",
+      "name": "aprendendo"
+    }
+  ]
+}
